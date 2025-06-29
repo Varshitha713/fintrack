@@ -7,6 +7,13 @@ const FinancialCharts = ({ incomeVsExpenseData, expenseData }) => {
     return null;
   }
 
+  // Check if there is any data to show in the Doughnut chart
+  const hasExpenseData =
+    expenseData?.datasets &&
+    expenseData.datasets.length > 0 &&
+    expenseData.datasets[0].data &&
+    expenseData.datasets[0].data.some((value) => value > 0);
+
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       <Card>
@@ -31,19 +38,25 @@ const FinancialCharts = ({ incomeVsExpenseData, expenseData }) => {
         <CardHeader>
           <CardTitle>Expense Breakdown</CardTitle>
         </CardHeader>
-        <CardContent className="h-[300px]">
-          <Doughnut 
-            data={expenseData}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
-                  position: 'bottom'
+        <CardContent className="h-[300px] flex items-center justify-center">
+          {hasExpenseData ? (
+            <Doughnut 
+              data={expenseData}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    position: 'bottom'
+                  }
                 }
-              }
-            }}
-          />
+              }}
+            />
+          ) : (
+            <div className="text-center w-full">
+              <p className="text-lg text-muted-foreground">No expenses yet!</p>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
